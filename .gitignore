@@ -2,5 +2,6 @@ venv/
 package-*
 staticfiles/
 .gitignore
-static/image/andrew9/
-static/
+static/images/*
+frame****
+
