@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-u&@hqb$i59&afzbf90)4=r#o39xp8)42v(=h@o%pq-m8l&3z%n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost","http://rayh.dev","http://api-test:8000","https://api-test", 'api-test', 'rayh.dev' ]
 
 
 # Application definition
@@ -122,5 +122,18 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8000",
+                        "http://BackEnd_Nolex:8000",
+                        "http://NGINX_Nolex",
+                        "http://nolex.xandyy.dev",
+                        "http://api.xandyy.dev",
+                        "http://rayh.dev",
+                        "http://api-test:8000",
+                        "https://api-test"
+                        ]
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

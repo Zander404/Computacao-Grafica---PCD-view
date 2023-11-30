@@ -3,10 +3,13 @@
 
 <!-- <script type="module" src="{% static '/js/index.js' %}"></script> -->
 <body>
+  <style>
+
+  </style>
   <div id="container"></div>
 
   <div id="info">
-  
+
   <script type="importmap">
     {
       "imports": {
@@ -17,70 +20,175 @@
     }
   </script>
   <script type="module">
-   import * as THREE from 'three';
 
-			import Stats from 'three/addons/libs/stats.module.js';
+	import * as THREE from 'three';
 
-			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-			import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+	import Stats from 'three/addons/libs/stats.module.js';
+	import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-			import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+	import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
 
-			let mixer;
-
-			const clock = new THREE.Clock();
-			const container = document.getElementById( 'container' );
-
-			const stats = new Stats();
-			container.appendChild( stats.dom );
-
-			const renderer = new THREE.WebGLRenderer( { antialias: true } );
-			renderer.setPixelRatio( window.devicePixelRatio );
-			renderer.setSize( window.innerWidth, window.innerHeight );
-			container.appendChild( renderer.domElement );
-
-			const pmremGenerator = new THREE.PMREMGenerator( renderer );
-
-			const scene = new THREE.Scene();
-			scene.background = new THREE.Color( 0xbfe3dd );
-			scene.environment = pmremGenerator.fromScene( new RoomEnvironment( renderer ), 0.04 ).texture;
-
-			const camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 100 );
-			camera.position.set( 5, 2, 8 );
-
-			const controls = new OrbitControls( camera, renderer.domElement );
-			controls.target.set( 0, 0.5, 0 );
-			controls.update();
-			controls.enablePan = false;
-			controls.enableDamping = true;
+	let container,stats;
+	const mixer = new THREE.AnimationMixer();
+	const clock = new THREE.Clock();
 
 
-			window.onresize = function () {
+	let camera, cameraTarget, scene, renderer;
 
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
+	init();
+	animate();
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
+	function init() {
 
-			};
+		container = document.createElement( 'div' );
+		document.body.appendChild( container );
+
+		camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 15 );
+		camera.position.set( 0, 0.015, 2 );
+
+		cameraTarget = new THREE.Vector3( 0, 0, 0 );
+
+		scene = new THREE.Scene();
+		scene.background = new THREE.Color( 0x000 );
+		// scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
+
+		// Ground
+
+		const plane = new THREE.Mesh(
+			new THREE.PlaneGeometry( 40, 40 ),
+			new THREE.MeshPhongMaterial( { color: 0x000, specular: 0x474747 } )
+		);
+		plane.rotation.x = - Math.PI / 2;
+		plane.position.y = - 0.5;
+		scene.add( plane );
+
+		plane.receiveShadow = true;		
+	
+		// Lights
+
+		scene.add( new THREE.HemisphereLight( 0x8d7c7c, 0x494966, 3 ) );
+
+		addShadowedLight( 1, 1, 1, 0xffffff, 3.5 );
+		// addShadowedLight( 0.5, 1, - 1, 0xffd500, 3 );
+
+		// renderer
+
+		renderer = new THREE.WebGLRenderer( { antialias: true } );
+		renderer.setPixelRatio( window.devicePixelRatio );
+		renderer.setSize( window.innerWidth, window.innerHeight );
+
+		renderer.shadowMap.enabled = true;
+
+		container.appendChild( renderer.domElement );
+		
+
+		// stats
+		
+		const controls = new OrbitControls(camera, renderer.domElement);
+		// controls.addEventListener("charge", render);
+		controls.minDistance = 1;
+		controls.maxDistance = 50;
+		controls.enablePan = false;
 
 
-			function animate() {
 
-				requestAnimationFrame( animate );
+		// resize
 
-				const delta = clock.getDelta();
+		window.addEventListener( 'resize', onWindowResize );
 
-				mixer.update( delta );
+	}
 
-				controls.update();
+	function addShadowedLight( x, y, z, color, intensity ) {
 
-				stats.update();
+		const directionalLight = new THREE.DirectionalLight( color, intensity );
+		directionalLight.position.set( x, y, z );
+		scene.add( directionalLight );
 
-				renderer.render( scene, camera );
+		directionalLight.castShadow = true;
 
-			}
+		const d = 1;
+		directionalLight.shadow.camera.left = - d;
+		directionalLight.shadow.camera.right = d;
+		directionalLight.shadow.camera.top = d;
+		directionalLight.shadow.camera.bottom = - d;
+
+		directionalLight.shadow.camera.near = 1;
+		directionalLight.shadow.camera.far = 4;
+
+		directionalLight.shadow.mapSize.width = 1024;
+		directionalLight.shadow.mapSize.height = 1024;
+
+		directionalLight.shadow.bias = - 0.001;
+
+	}
+
+	function onWindowResize() {
+
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize( window.innerWidth, window.innerHeight );
+
+	}
+
+	
+	let base_path = "{%static '/images/andrew9/ply/frame'%}"
+	let file_extension = '.ply'
+	let currentFrame = 0;
+	const total_frames = 317
+	const loader = new PLYLoader(); 
+
+
+	const loadAndAddFrame = (frameNumber) => {
+		
+		const file_path = base_path + frameNumber.toString().padStart(4, '0') + file_extension;
+
+
+	
+		loader.load(file_path, function (geometry) {
+	
+			geometry.computeVertexNormals();
+			
+			console.log(geometry); 
+
+			const material = new THREE.PointsMaterial( { size: 0.01, vertexColors: true } );
+			const mesh = new THREE.Points( geometry, material );
+
+			mesh.position.y = -0.2;
+			mesh.position.z = 0.3;
+			mesh.rotation.x = -Math.PI / 2;
+			mesh.scale.multiplyScalar(0.001);
+
+			mesh.castShadow = true;
+			mesh.receiveShadow = true;
+
+			scene.add(mesh);
+
+			const clip = THREE.AnimationClip.CreateFromMorphTargetSequence('animation', geometry.morphAttributes.position, 30);
+			const action = mixer.clipAction(clip, mesh);
+			action.play();
+		});
+
+
+	}
+
+	for (let i = 0; i < total_frames; i++) {
+    	loadAndAddFrame(i);
+	}
+
+
+	function animate() {
+
+		requestAnimationFrame( animate );
+		mixer.update(clock.getDelta())
+		renderer.render( scene, camera );
+
+
+	}
+
+	loadAndAddFrame()
+	animate()
+
 
   </script>
 </body>

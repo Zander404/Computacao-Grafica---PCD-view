@@ -1,4 +1,5 @@
- import * as THREE from 'https://cdn.skypack.dev/three@v0.149.0/build/three.module.js';
+//  import * as THREE from 'https://cdn.skypack.dev/three@v0.149.0/build/three.module.js';
+ import * as THREE from "{%static 'three/'%}";
 
     let camera, scene, renderer, vrButton;
 

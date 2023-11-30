@@ -1,4 +1,6 @@
 venv/
 package-*
 staticfiles/
-.gitnore
+.gitignore
+static/image/andrew9/
+static/
