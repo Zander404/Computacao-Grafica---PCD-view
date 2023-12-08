@@ -55,7 +55,7 @@
     
     const file_path = "{%static '/images/andrew9/ply/frame'%}"
     const file_extension = ".ply"
-    const size = 327
+    const size = {{frames}}
     let i = 0
 
     async function animate(){
@@ -65,37 +65,32 @@
         if (i == size){
             i=1
         }
-        await sleep(10000)
-        scene.remove(mesh);
+
+       
+        await loader.load(`${file_name}`, async function(geometry){
 
 
-        console.log(file_name)
-        loader.load(`${file_name}`, async function(geometry){
-        console.log(geometry); 
+            const material = new THREE.PointsMaterial( { size: 0.01, vertexColors: true } );
+            const mesh = new THREE.Points( geometry, material );
 
+            mesh.position.y = -3.0;
+            mesh.position.z = 0.3;
+            mesh.rotation.x = -Math.PI / 2;
+            mesh.scale.multiplyScalar(0.015);
 
-        const material = new THREE.PointsMaterial( { size: 0.01, vertexColors: true } );
-        const mesh = new THREE.Points( geometry, material );
-
-        mesh.position.y = -3.0;
-        mesh.position.z = 0.3;
-        mesh.rotation.x = -Math.PI / 2;
-        mesh.scale.multiplyScalar(0.015);
-
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-    
-        scene.add(mesh);
-        await sleep(100000);
-
-
-    
-    })
-    requestAnimationFrame(animate)
-        renderer.render(scene,camera)
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+        
+            await scene.add(mesh);
+            await sleep(100)
+            await scene.remove(mesh);
+        })
+        await requestAnimationFrame(animate)
+        await renderer.render(scene,camera)
     }
  
-    animate();
+    await animate();
+    console.log({{frames}})
     
 
     
