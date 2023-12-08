@@ -4,4 +4,6 @@ staticfiles/
 .gitignore
 static/images/*
 frame****
+.venv/
+
 

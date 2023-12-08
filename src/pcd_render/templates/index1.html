@@ -1,0 +1,105 @@
+{% load static %}
+<!-- Add this to the head section of your HTML template -->
+
+<!-- <script type="module" src="{% static '/js/index.js' %}"></script> -->
+<body>
+  <style>
+
+  </style>
+  <div id="container"></div>
+
+  <div id="info">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@v0.149.0/build/three.module.js",
+        "three/examples/jsm/": "https://unpkg.com/three@v0.149.0/examples/jsm/",
+        "three/addons/": "https://unpkg.com/three@v0.149.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+
+	import * as THREE from 'three';
+
+	import Stats from 'three/addons/libs/stats.module.js';
+	import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+	import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
+    
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    let renderer = new THREE.WebGLRenderer();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    let loader = new PLYLoader();
+
+
+    let ambientLight = new THREE.AmbientLight(0xffff)
+    scene.add(ambientLight)
+
+    let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    scene.add(directionalLight);
+
+    camera.position.z = 5
+    camera.position.x = 3
+
+    let rotationAngle = 0;
+    
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    const file_path = "{%static '/images/andrew9/ply/frame'%}"
+    const file_extension = ".ply"
+    const size = 327
+    let i = 0
+
+    async function animate(){
+
+        const file_name = file_path + i.toString().padStart(4,'0') + file_extension
+        i += 1
+        if (i == size){
+            i=1
+        }
+        await sleep(10000)
+        scene.remove(mesh);
+
+
+        console.log(file_name)
+        loader.load(`${file_name}`, async function(geometry){
+        console.log(geometry); 
+
+
+        const material = new THREE.PointsMaterial( { size: 0.01, vertexColors: true } );
+        const mesh = new THREE.Points( geometry, material );
+
+        mesh.position.y = -3.0;
+        mesh.position.z = 0.3;
+        mesh.rotation.x = -Math.PI / 2;
+        mesh.scale.multiplyScalar(0.015);
+
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+    
+        scene.add(mesh);
+        await sleep(100000);
+
+
+    
+    })
+    requestAnimationFrame(animate)
+        renderer.render(scene,camera)
+    }
+ 
+    animate();
+    
+
+    
+
+
+  </script>
+</body>
