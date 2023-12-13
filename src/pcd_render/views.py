@@ -12,20 +12,23 @@ def index(request):
     # Verify that the folder exists before trying to get the file count
     if os.path.exists(folder_path):
         frames = get_file_count(folder_path)
-        print(images_path)
         return render(request, "index1.html", {'frames': frames, 'file_path': str(images_path)})
  
 
 def point_cloud1(request):
-    folder_path = os.path.join(settings.BASE_DIR, 'staticfiles/images/andrew9/ply')
+    path = "images/david9/ply"
+    images_path = f"{path}/frame"
+    folder_path = os.path.join(settings.BASE_DIR, f'staticfiles/{path}')
     # Verify that the folder exists before trying to get the file count
     if os.path.exists(folder_path):
         frames = get_file_count(folder_path)
-        return render(request, "index1.html", {'frames': frames,'folder_path': folder_path})
+        return render(request, "index1.html", {'frames': frames, 'file_path': str(images_path)})
 
 def point_cloud2(request):
-    folder_path = os.path.join(settings.BASE_DIR, 'staticfiles/images/andrew9/ply')
+    path = "images/sarah9/ply"
+    images_path = f"{path}/frame"
+    folder_path = os.path.join(settings.BASE_DIR, f'staticfiles/{path}')
     # Verify that the folder exists before trying to get the file count
     if os.path.exists(folder_path):
         frames = get_file_count(folder_path)
-        return render(request, "index1.html", {'frames': frames})
+        return render(request, "index1.html", {'frames': frames, 'file_path': str(images_path)})

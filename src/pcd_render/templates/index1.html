@@ -36,6 +36,12 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    const controls = new OrbitControls(camera, renderer.domElement);
+		// controls.addEventListener("charge", render);
+		controls.minDistance = 5;
+		controls.maxDistance = 50;
+		controls.enablePan = true;
+
     let loader = new PLYLoader();
 
 
@@ -85,7 +91,7 @@
             mesh.receiveShadow = true;
         
             await scene.add(mesh);
-            await sleep(100)
+            await sleep(20)
             await scene.remove(mesh);
         })
         await requestAnimationFrame(animate)
