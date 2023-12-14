@@ -5,8 +5,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', view=views.index),
-    path('1', view=views.point_cloud1),
-    path('2', view=views.point_cloud2),
+    path('image1', view=views.point_cloud1, name="image1"),
+    path('image2', view=views.point_cloud2, name='image2'),
+    path('image3', view=views.point_cloud3, name='image3'),
     path('form', view=views.form, name='form'),
     path('thank_you', view=views.index, name='thank_you'),
 
