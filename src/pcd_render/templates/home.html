@@ -10,25 +10,35 @@
 <body class="w-fit h-fit">
 
     {% csrf_token %}
-    <div> Sou um careca raivoso</div>
+    <div class="flex justify-around ">
+        <div>
+            <h1 class="text-3xl font-bold"> Point Cloud Viewer </h1>
+        </div>
+        <a class="btn btn-wide btn-ghost transition delay-150 duration-300 ease-in-out hover:text-green-400 hover:underline " href="/admin/">Admin page</a>
+    </div>
     <div class="flex justify-center flex-col outline outline-2 outline-red-800 space-y-20 py-8 w-screen h-fit">
-        <div class="flex justify-center">
-            <a class="btn btn-outline btn-success" href="{%url 'image1'%}">Point Cloud 1 - David</a>
+        <div class="flex justify-center space-x-8">
+            <a class="btn btn-outline btn-success" href="{%url 'video1'%}">Point Cloud 1 - David - Video VR</a>
+            <a class="btn btn-outline btn-success" href="{%url 'image1'%}">Point Cloud 1 - David - Image VR</a>
 
         </div>
 
-        <div class="flex justify-center">
-            <a class="btn btn-outline btn-success" href="{%url 'image2'%}">Point Cloud 2 - Sarah</a>
+        <div class="flex justify-center space-x-8">
+            <a class="btn btn-outline btn-success" href="{%url 'video2'%}">Point Cloud 2 - Sarah - Video VR</a>
+            <a class="btn btn-outline btn-success" href="{%url 'image2'%}">Point Cloud 2 - Sarah - Image VR</a>
 
         </div>
 
-        <div class="flex justify-center">
-            <a class="btn btn-outline btn-success" href="{%url 'image3'%}">Point Cloud 3 - Andrew</a>
+        <div class="flex justify-center space-x-8">
+            <a class="btn btn-outline btn-success" href="{%url 'video3'%}">Point Cloud 3 - Andrew - Video VR </a>
+            <a class="btn btn-outline btn-success" href="{%url 'image3'%}">Point Cloud 3 - Andrew - Image VR </a>
         </div>
 
-        <div class="flex justify-start">
+        <div class="flex justify-around">
             <a class="btn btn-outline btn-success" href="{%url 'form'%}">Formulário</a>
+           
         </div>
 
     </div>
+    
 </body>

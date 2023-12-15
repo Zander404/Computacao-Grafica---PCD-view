@@ -34,11 +34,11 @@
 	import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
     
     let scene = new THREE.Scene();
+    let camera
     
     scene.background = new THREE.Color( 0x444444 );
 
-    let camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 10 );
-    camera.position.set( 0, 1.6, 3 );
+    camera = new THREE.PerspectiveCamera( 160, window.innerWidth / window.innerHeight, 1, 2000 );
     camera.layers.enable( 1 );
     let renderer = new THREE.WebGLRenderer();
     let hand1, hand2;
@@ -51,12 +51,12 @@
     document.body.appendChild(renderer.domElement);
     document.body.appendChild( VRButton.createButton( renderer ) );
 
-    // // Controles
-    // const controls = new OrbitControls(camera, renderer.domElement);
-		// // controls.addEventListener("charge", render);
-		// controls.minDistance = 5;
-		// controls.maxDistance = 50;
-		// controls.enablePan = true;
+    // Controles
+    const controls = new OrbitControls(camera, renderer.domElement);
+		// controls.addEventListener("charge", render);
+		controls.minDistance = 5;
+		controls.maxDistance = 50;
+		controls.enablePan = true;
 
     let loader = new PLYLoader();
     // CONTROLE VR
@@ -198,7 +198,7 @@
     scaling.active = false;
 
     }
-    const geometry = new THREE.BufferGeometry().setFromPoints( [ new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, - 1 ) ] );
+    const geometry = new THREE.BufferGeometry().setFromPoints( [ new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -1 ) ] );
 
     const line = new THREE.Line( geometry );
     line.name = 'line';
@@ -208,6 +208,8 @@
     controller2.add( line.clone() );
     
     window.addEventListener( 'resize', onWindowResize );
+
+    
     function onWindowResize() {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -225,20 +227,6 @@
     let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
     scene.add(directionalLight);
 
-
-    let rotationAngle = 0;
-
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.xr.enabled = true;
-    container.appendChild( renderer.domElement );
-    document.body.appendChild( VRButton.createButton( renderer ) );
-
-
-    
-
-    //
     
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -266,25 +254,24 @@
         if (i == size){
             i=1
         }
-
+        if (i >= 300){
+          i = 0
+        }
        
-        await loader.load(`${file_name}`, async function(geometry){
+      await loader.load(`${file_name}`, async function(geometry){
 
 
-            const material = new THREE.PointsMaterial( { size: 0.01, vertexColors: true } );
-            const mesh = new THREE.Points( geometry, material );
+          const material = new THREE.PointsMaterial( { size: 0.1, vertexColors: true } );
+          const mesh = new THREE.Points( geometry, material );
 
-            mesh.position.y = -3.0;
-            mesh.position.z = 0.3;
-            mesh.rotation.x = -Math.PI / 2;
-            mesh.scale.multiplyScalar(0.015);
 
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-        
-            await scene.add(mesh);
-            await sleep(20)
-            await scene.remove(mesh);
+
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+      
+          await scene.add(mesh);
+          await sleep(20)
+          await scene.remove(mesh);
         })
 
         await requestAnimationFrame(animate)

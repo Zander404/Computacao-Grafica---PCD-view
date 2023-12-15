@@ -14,32 +14,61 @@ def get_file_count(folder_path):
 def index(request):
     return render(request, 'home.html')
 
-def point_cloud1(request):
-    path = "images/david9/ply"
-    images_path = f"{path}/frame"
+# View Video VR
+def point_cloud_video1(request):
+    path = "images/david9"
+    images_path = f"{path}/David9.mp4"
     folder_path = os.path.join(settings.BASE_DIR, f'staticfiles/{path}')
     # Verify that the folder exists before trying to get the file count
     if os.path.exists(folder_path):
         frames = get_file_count(folder_path)
-        return render(request, "index.html", {'frames': frames, 'file_path': str(images_path)})
+        return render(request, "video.html", {'frames': frames, 'file_path': str(images_path)})
 
-def point_cloud2(request):
-    path = "images/sarah9/ply"
-    images_path = f"{path}/frame"
+def point_cloud_video2(request):
+    
+    path = 'images/sarah9'
+    images_path = f"{path}/Sarah9.mp4"
     folder_path = os.path.join(settings.BASE_DIR, f'staticfiles/{path}')
     # Verify that the folder exists before trying to get the file count
     if os.path.exists(folder_path):
-        frames = get_file_count(folder_path)
-        return render(request, "index1.html", {'frames': frames, 'file_path': str(images_path)})
+        return render(request, "video.html", {'file_path': str(images_path)})
 
-def point_cloud3(request):
-    path = "images/andrew9/ply"
-    images_path = f"{path}/frame"
+def point_cloud_video3(request):
+    path = "images/andrew9"
+    images_path = f"{path}/Andrew9.mp4"
+    folder_path = os.path.join(settings.BASE_DIR, f'staticfiles/{path}')
+    # Verify that the folder exists before trying to get the file count
+    if os.path.exists(folder_path):
+        return render(request, "video.html", {'file_path': str(images_path)})
+    
+
+# View Image
+def point_cloud_image1(request):
+    path = "images/david9"
+    images_path = f"{path}/ply/frame"
     folder_path = os.path.join(settings.BASE_DIR, f'staticfiles/{path}')
     # Verify that the folder exists before trying to get the file count
     if os.path.exists(folder_path):
         frames = get_file_count(folder_path)
-        return render(request, "index1.html", {'frames': frames, 'file_path': str(images_path)})
+        return render(request, "image.html", {'frames': frames, 'file_path': str(images_path)})
+    
+def point_cloud_image2(request):
+    path = "images/sarah9"
+    images_path = f"{path}/ply/frame"
+    folder_path = os.path.join(settings.BASE_DIR, f'staticfiles/{path}')
+    # Verify that the folder exists before trying to get the file count
+    if os.path.exists(folder_path):
+        frames = get_file_count(folder_path)
+        return render(request, "image.html", {'frames': frames, 'file_path': str(images_path)})
+    
+def point_cloud_image3(request):
+    path = "images/andrew9"
+    images_path = f"{path}/ply/frame"
+    folder_path = os.path.join(settings.BASE_DIR, f'staticfiles/{path}')
+    # Verify that the folder exists before trying to get the file count
+    if os.path.exists(folder_path):
+        frames = get_file_count(folder_path)
+        return render(request, "image.html", {'frames': frames, 'file_path': str(images_path)})
 
 
 

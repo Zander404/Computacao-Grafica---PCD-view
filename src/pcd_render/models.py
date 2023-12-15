@@ -5,6 +5,7 @@ from django.db import models
 class FormModel(models.Model):
     choices = [("F","Forte"), ("M","Moderada"), ("L","Leve"), ("N","Nenhuma")]
     name = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    email = models.EmailField(blank=False, null=False,  default='')
     nausea = models.CharField(max_length=1, choices=choices, name="Nausea")
     stomach = models.CharField(max_length=1, choices=choices, name="Desconforto Estomacal")
     discomfort = models.CharField(max_length=1, choices=choices, name="Desconforto")
