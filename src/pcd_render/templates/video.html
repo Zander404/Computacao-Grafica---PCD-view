@@ -50,9 +50,12 @@
 		// Controles
     	const controls = new OrbitControls(camera, renderer.domElement);
 		// controls.addEventListener("charge", render);
-		controls.minDistance = 5;
-		controls.maxDistance = 100;
+		controls.minDistance = 0.5;
+		controls.maxDistance = 10;
 		controls.enablePan = true;
+		camera.position.x = 0.05356730410478175;
+		camera.position.y = 0.16488184415912638;
+		camera.position.z = -41.9960825168735346;
 
 	
 
@@ -69,9 +72,13 @@
 
 		// left
 
-		const geometry1 = new THREE.SphereGeometry( 500, 60, 40 );
+		const geometry1 = new THREE.PlaneGeometry( window.innerWidth/2,  window.innerHeight/2	);
 		// invert the geometry on the x-axis so that all of the faces point inward
-		geometry1.scale( -1, 1, 1 );
+		geometry1.scale( -0.9, 1, 1 );
+		// geometry1.scale.x += 100
+		
+		
+		camera.lookAt(geometry1)
 
 		const uvs1 = geometry1.attributes.uv.array;
 
@@ -84,15 +91,16 @@
 		const material1 = new THREE.MeshBasicMaterial( { map: texture } );
 
 		const mesh1 = new THREE.Mesh( geometry1, material1 );
+		// mesh1.scale.y *= -1;
 		// mesh1.rotation.y = - Math.PI;
 		mesh1.layers.set( 1 ); // display in left eye only
 		scene.add( mesh1 );
 
 		// right
 
-		const geometry2 = new THREE.SphereGeometry( 500, 60, 40 );
-		geometry2.scale( - 1, 1, 1 );
-
+		const geometry2 = new THREE.SphereGeometry(  window.innerWidth/2,  window.innerHeight/2, 40 );
+		geometry2.scale( -1, 1, 1 );
+		
 		const uvs2 = geometry2.attributes.uv.array;
 
 		for ( let i = 0; i < uvs2.length; i += 2 ) {
@@ -106,6 +114,8 @@
 
 		const mesh2 = new THREE.Mesh( geometry2, material2 );
 		// mesh2.rotation.x = - Math.PI;
+		// mesh2.scale.y *= -1;
+
 		mesh2.layers.set( 2 ); // display in right eye only
 		scene.add( mesh2 );
 
@@ -117,13 +127,7 @@
 		container.appendChild( renderer.domElement );
 
 		document.body.appendChild( VRButton.createButton( renderer ) );
-		// let x = mesh1.position.x
-		// let y = mesh1.position.y
-		// let z = mesh1.position.z
-		// camera.position.x = 0
-    	// camera.position.y = y + 200
-    	// camera.position.z = z + 100
-    	// // camera.lookAt(controls.target);
+
 
 		var newTarget = new THREE.Vector3(0, 0, 0);
 		newTarget.copy(mesh1.position);
@@ -145,12 +149,13 @@
 	function animate() {
 
 		renderer.setAnimationLoop( render );
-
+		render()
 	}
 
 	function render() {
 
 		renderer.render( scene, camera );
+		console.log(camera.position)
 
 	}
 
