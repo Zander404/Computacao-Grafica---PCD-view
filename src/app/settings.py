@@ -125,15 +125,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8000",
-                        "http://BackEnd_Nolex:8000",
-                        "http://NGINX_Nolex",
-                        "http://nolex.xandyy.dev",
-                        "http://api.xandyy.dev",
-                        "http://rayh.dev",
-                        "http://api-test:8000",
-                        "https://api-test"
-                        ]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8000",]
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
